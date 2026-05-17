@@ -1,0 +1,1892 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Planejamento Patrimonial — R$ 4 Milhões</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #F0D98A;
+    --gold-dark: #8B6914;
+    --ink: #1A1814;
+    --ink-mid: #3D3830;
+    --ink-soft: #6B6355;
+    --cream: #FAF8F3;
+    --cream-dark: #F0EDE4;
+    --paper: #FEFCF8;
+    --border: rgba(201,168,76,0.25);
+    --border-strong: rgba(201,168,76,0.5);
+    --green: #2D6A4F;
+    --green-light: #E8F5EE;
+    --red: #9B2226;
+    --red-light: #FDEAEA;
+    --blue: #1D3D6B;
+    --blue-light: #E8F0FA;
+    --section-gap: 4rem;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    line-height: 1.7;
+  }
+
+  /* COVER */
+  .cover {
+    background: var(--ink);
+    color: var(--cream);
+    padding: 5rem 4rem;
+    position: relative;
+    overflow: hidden;
+    min-height: 340px;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 400px; height: 400px;
+    border: 1px solid rgba(201,168,76,0.15);
+    border-radius: 50%;
+  }
+  .cover::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; left: -60px;
+    width: 280px; height: 280px;
+    border: 1px solid rgba(201,168,76,0.1);
+    border-radius: 50%;
+  }
+  .cover-label {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+  }
+  .cover h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.2rem;
+    line-height: 1.15;
+    margin-bottom: 1rem;
+    font-weight: 700;
+  }
+  .cover h1 span { color: var(--gold); }
+  .cover-sub {
+    font-size: 1.05rem;
+    color: rgba(250,248,243,0.65);
+    max-width: 600px;
+    font-weight: 300;
+    margin-bottom: 2.5rem;
+  }
+  .cover-stats {
+    display: flex;
+    gap: 3rem;
+    position: relative;
+    z-index: 1;
+  }
+  .cover-stat-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.25rem;
+  }
+  .cover-stat-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+
+  /* NAV */
+  .nav {
+    background: var(--paper);
+    border-bottom: 1px solid var(--border);
+    padding: 0 4rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+  }
+  .nav a {
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--ink-soft);
+    text-decoration: none;
+    padding: 1rem 1.25rem;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: all 0.2s;
+  }
+  .nav a:hover { color: var(--gold-dark); border-bottom-color: var(--gold); }
+
+  /* MAIN */
+  .main { max-width: 960px; margin: 0 auto; padding: 0 2rem; }
+
+  /* SECTIONS */
+  .section {
+    padding: var(--section-gap) 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .section:last-child { border-bottom: none; }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--gold);
+    opacity: 0.4;
+    line-height: 1;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.75rem;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+
+  /* TYPOGRAPHY */
+  h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 2rem 0 0.75rem;
+    color: var(--ink);
+  }
+  h4 {
+    font-size: 0.85rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--gold-dark);
+    margin: 1.5rem 0 0.5rem;
+  }
+  p { margin-bottom: 1rem; font-size: 0.97rem; color: var(--ink-mid); }
+  p:last-child { margin-bottom: 0; }
+
+  /* CALLOUT BOXES */
+  .callout {
+    border-left: 3px solid var(--gold);
+    background: var(--cream-dark);
+    padding: 1.25rem 1.5rem;
+    margin: 1.5rem 0;
+    border-radius: 0 8px 8px 0;
+  }
+  .callout.warning {
+    border-left-color: var(--red);
+    background: var(--red-light);
+  }
+  .callout.success {
+    border-left-color: var(--green);
+    background: var(--green-light);
+  }
+  .callout.info {
+    border-left-color: var(--blue);
+    background: var(--blue-light);
+  }
+  .callout-title {
+    font-size: 0.8rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  .callout.warning .callout-title { color: var(--red); }
+  .callout.success .callout-title { color: var(--green); }
+  .callout.info .callout-title { color: var(--blue); }
+  .callout p { font-size: 0.93rem; }
+
+  /* TABLES */
+  .table-wrap { overflow-x: auto; margin: 1.5rem 0; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+  thead tr { background: var(--ink); color: var(--cream); }
+  thead th {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  tbody tr { border-bottom: 1px solid var(--border); }
+  tbody tr:nth-child(even) { background: var(--cream-dark); }
+  tbody tr:hover { background: rgba(201,168,76,0.08); }
+  td { padding: 0.7rem 1rem; color: var(--ink-mid); }
+  td:first-child { font-weight: 500; color: var(--ink); }
+  .td-num { font-family: 'IBM Plex Mono', monospace; text-align: right; }
+  .td-green { color: var(--green); font-weight: 500; }
+  .td-red { color: var(--red); font-weight: 500; }
+  .td-gold { color: var(--gold-dark); font-weight: 600; }
+
+  /* GRID CARDS */
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+  .card {
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem;
+  }
+  .card-icon { font-size: 1.5rem; margin-bottom: 0.75rem; }
+  .card-label { font-size: 0.75rem; letter-spacing: 1px; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 0.25rem; }
+  .card-value { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 600; color: var(--ink); }
+  .card-sub { font-size: 0.8rem; color: var(--ink-soft); margin-top: 0.25rem; }
+
+  /* STAT ROW */
+  .stat-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 1.5rem 0;
+  }
+  .stat-item {
+    flex: 1;
+    min-width: 140px;
+    background: var(--paper);
+    padding: 1.25rem 1rem;
+    text-align: center;
+  }
+  .stat-label { font-size: 0.75rem; letter-spacing: 1px; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 0.35rem; }
+  .stat-val { font-family: 'IBM Plex Mono', monospace; font-size: 1.2rem; font-weight: 500; }
+  .stat-val.green { color: var(--green); }
+  .stat-val.red { color: var(--red); }
+  .stat-val.gold { color: var(--gold-dark); }
+
+  /* TIMELINE */
+  .timeline { margin: 1.5rem 0; }
+  .tl-item { display: flex; gap: 1.5rem; margin-bottom: 1.75rem; }
+  .tl-left { display: flex; flex-direction: column; align-items: center; }
+  .tl-dot {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--ink);
+    color: var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .tl-line { flex: 1; width: 1px; background: var(--border-strong); margin-top: 6px; }
+  .tl-content { flex: 1; padding-bottom: 0.5rem; }
+  .tl-week { font-size: 0.75rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold-dark); margin-bottom: 0.25rem; font-weight: 600; }
+  .tl-title { font-weight: 600; font-size: 1rem; margin-bottom: 0.4rem; }
+  .tl-desc { font-size: 0.9rem; color: var(--ink-mid); }
+
+  /* PROGRESS BAR */
+  .alloc-item { margin-bottom: 1rem; }
+  .alloc-header { display: flex; justify-content: space-between; font-size: 0.88rem; margin-bottom: 0.35rem; }
+  .alloc-name { font-weight: 500; }
+  .alloc-vals { font-family: 'IBM Plex Mono', monospace; color: var(--ink-soft); }
+  .alloc-bar { height: 8px; background: var(--cream-dark); border-radius: 4px; overflow: hidden; }
+  .alloc-fill { height: 100%; border-radius: 4px; transition: width 0.5s; }
+
+  /* BANK COMPARISON */
+  .bank-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+  .bank-card {
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem;
+  }
+  .bank-card.recommended { border-color: var(--gold); border-width: 2px; }
+  .bank-badge {
+    display: inline-block;
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    background: var(--gold);
+    color: var(--ink);
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+  }
+  .bank-badge.warn { background: var(--red-light); color: var(--red); }
+  .bank-badge.neutral { background: var(--cream-dark); color: var(--ink-soft); }
+  .bank-name { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; }
+  .bank-pros, .bank-cons { font-size: 0.85rem; margin-top: 0.5rem; }
+  .bank-pros::before { content: '✓ '; color: var(--green); }
+  .bank-cons::before { content: '✗ '; color: var(--red); }
+
+  /* CHART CONTAINER */
+  .chart-wrap {
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+  }
+  .chart-title { font-size: 0.8rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 1rem; }
+
+  /* SCENARIO TABLE */
+  .scenario-wrap { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin: 1.5rem 0; }
+  .scenario-col { background: var(--paper); padding: 1.25rem; }
+  .scenario-col.pessimista { background: #fff5f5; }
+  .scenario-col.moderado { background: #f0f7f4; }
+  .scenario-col.otimista { background: #f5f0e8; }
+  .scenario-header { font-size: 0.75rem; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; margin-bottom: 0.5rem; }
+  .scenario-col.pessimista .scenario-header { color: var(--red); }
+  .scenario-col.moderado .scenario-header { color: var(--green); }
+  .scenario-col.otimista .scenario-header { color: var(--gold-dark); }
+  .scenario-rate { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; margin-bottom: 0.25rem; }
+  .scenario-sub { font-size: 0.82rem; color: var(--ink-soft); }
+  .scenario-detail { margin-top: 0.75rem; font-size: 0.82rem; line-height: 1.6; color: var(--ink-mid); }
+
+  /* PROFESSIONAL TEAM */
+  .pro-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+  .pro-card {
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem;
+  }
+  .pro-role { font-size: 0.75rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold-dark); font-weight: 600; margin-bottom: 0.35rem; }
+  .pro-title { font-weight: 600; font-size: 1rem; margin-bottom: 0.5rem; }
+  .pro-cost { font-family: 'IBM Plex Mono', monospace; font-size: 0.85rem; color: var(--ink-soft); margin-bottom: 0.75rem; }
+  .pro-desc { font-size: 0.85rem; color: var(--ink-mid); }
+
+  /* ERROR BOXES */
+  .error-list { list-style: none; margin: 1rem 0; }
+  .error-list li {
+    padding: 0.75rem 1rem 0.75rem 2.5rem;
+    position: relative;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.9rem;
+    color: var(--ink-mid);
+  }
+  .error-list li::before {
+    content: '!';
+    position: absolute;
+    left: 0.75rem;
+    top: 0.7rem;
+    width: 18px; height: 18px;
+    background: var(--red);
+    color: white;
+    border-radius: 50%;
+    font-size: 0.7rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 18px;
+    text-align: center;
+  }
+
+  /* FINAL PLAN TABLE */
+  .final-block {
+    background: var(--ink);
+    color: var(--cream);
+    border-radius: 12px;
+    padding: 2rem;
+    margin: 2rem 0;
+  }
+  .final-block h3 { color: var(--gold); margin-top: 0; font-family: 'Playfair Display', serif; }
+  .final-block td { color: rgba(250,248,243,0.8); }
+  .final-block td:first-child { color: var(--cream); }
+  .final-block thead tr { background: rgba(255,255,255,0.1); }
+  .final-block thead th { color: var(--gold); }
+  .final-block tbody tr { border-bottom: 1px solid rgba(201,168,76,0.15); }
+  .final-block tbody tr:nth-child(even) { background: rgba(255,255,255,0.04); }
+  .final-block .td-gold { color: var(--gold-light); }
+
+  /* FOOTER */
+  .footer {
+    background: var(--ink);
+    color: rgba(250,248,243,0.5);
+    text-align: center;
+    padding: 2rem;
+    font-size: 0.8rem;
+    margin-top: 4rem;
+  }
+  .footer strong { color: var(--gold); }
+
+  @media (max-width: 640px) {
+    .cover { padding: 3rem 1.5rem; }
+    .cover h1 { font-size: 2rem; }
+    .nav { padding: 0 1rem; }
+    .main { padding: 0 1rem; }
+    .cover-stats { gap: 1.5rem; flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-label">Planejamento Patrimonial Profissional · Lucas Dionisio</div>
+  <h1>Gestão de <span>R$ 4 Milhões</span><br>com Inteligência</h1>
+  <p class="cover-sub">Plano completo, conservador e sofisticado para preservar, estruturar e multiplicar seu patrimônio com segurança e eficiência tributária elaborado por Lucas Dionisio de O. Carvalho.</p>
+  <div class="cover-stats">
+    <div>
+      <div class="cover-stat-label">Patrimônio Inicial</div>
+      <div class="cover-stat-value">R$ 4.000.000</div>
+    </div>
+    <div>
+      <div class="cover-stat-label">Renda Mensal Segura</div>
+      <div class="cover-stat-value">R$ 16–22k</div>
+    </div>
+    <div>
+      <div class="cover-stat-label">Projeção 10 Anos</div>
+      <div class="cover-stat-value">R$ 7–9 Mi</div>
+    </div>
+    <div>
+      <div class="cover-stat-label">Perfil Recomendado</div>
+      <div class="cover-stat-value">Conservador</div>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="#visao">Visão Geral</a>
+  <a href="#primeiros90">90 Dias</a>
+  <a href="#reserva">Reserva</a>
+  <a href="#carteira">Carteira</a>
+  <a href="#renda">Renda</a>
+  <a href="#tributario">Tributação</a>
+  <a href="#internacional">Internacional</a>
+  <a href="#comportamento">Comportamento</a>
+  <a href="#cartoes">Cartões</a>
+  <a href="#equipe">Equipe</a>
+  <a href="#plano">Plano Real</a>
+  <a href="#simulacao">Simulação</a>
+  <a href="#conclusao">Conclusão</a>
+</nav>
+
+<div class="main">
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- 1. VISÃO GERAL -->
+<!-- ═══════════════════════════════════════════════════ -->
+<section class="section" id="visao">
+  <div class="section-header">
+    <div class="section-num">01</div>
+    <div class="section-title">Visão Geral Estratégica</div>
+  </div>
+
+  <h3>A mentalidade correta para quem recebe R$ 4 milhões</h3>
+  <p>Receber R$ 4 milhões não é o fim de uma jornada, é o início de uma responsabilidade. A maioria das pessoas que recebe esse valor subitamente (herança, venda de imóvel, rescisão, processo judicial) comete erros graves nos primeiros 12 meses que são difíceis de reverter.</p>
+  <p>A primeira coisa a entender: <strong>você não é rico porque tem R$ 4 milhões em conta</strong>. Você está potencialmente rico se e somente se estruturar esse capital de forma inteligente. Sem estrutura, R$ 4 milhões desaparecem em 5 a 8 anos.</p>
+
+  <div class="callout">
+    <div class="callout-title">Princípio Fundamental</div>
+    <p>Milionários de longo prazo preservam capital primeiro, multiplicam depois. Não o contrário. A ordem importa mais do que os instrumentos escolhidos.</p>
+  </div>
+
+  <h3>A diferença entre riqueza temporária e patrimônio estruturado</h3>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-label">Riqueza Temporária</div>
+      <p style="font-size:0.85rem;margin-top:0.5rem;">Dinheiro na conta corrente. Sem estrutura. Gasto por impulso. Desaparece com lifestyle inflation.</p>
+    </div>
+    <div class="card">
+      <div class="card-label">Patrimônio Estruturado</div>
+      <p style="font-size:0.85rem;margin-top:0.5rem;">Capital distribuído em ativos que geram renda. Protegido legalmente. Eficiente tributariamente. Perpetua-se.</p>
+    </div>
+  </div>
+
+  <h3>Os maiores erros que destroem patrimônio</h3>
+  <ul class="error-list">
+    <li><strong>Gastar antes de estruturar.</strong> Comprar imóvel na planta, carro de luxo ou reforma cara antes de qualquer planejamento. O capital imobilizado perde flexibilidade e liquidez.</li>
+    <li><strong>Confiar em um único banco ou gestor.</strong> Concentração bancária é um risco grave. Bancos quebram. Gestores cometem erros. Diversificação é obrigatória.</li>
+    <li><strong>Buscar retornos altos rapidamente.</strong> Quem promete 3% ao mês está mentindo ou vai te destruir. A rentabilidade real sustentável no Brasil é de 0,8% a 1,2% ao mês.</li>
+    <li><strong>Ignorar inflação.</strong> 10% ao ano parece bom, mas com inflação de 6%, seu ganho real é apenas 4%. Sem correção inflacionária, você empobrece ganhando.</li>
+    <li><strong>Não contratar profissionais.</strong> Economia de R$ 2.000/mês em assessoria pode custar R$ 400.000 em decisões ruins ao longo de 5 anos.</li>
+    <li><strong>Contar para família e amigos.</strong> Isso atrai pedidos, conflitos, expectativas e falsas parcerias de negócios. Discreção é proteção patrimonial.</li>
+    <li><strong>Não diversificar moedas.</strong> Ter 100% em reais é um risco cambial e político enorme. O dólar é um seguro essencial.</li>
+  </ul>
+
+  <h3>Por que preservar capital é mais importante que lucro rápido</h3>
+  <p>Imagine dois cenários: no Cenário A você ganha 20% e depois perde 20%. Você acha que voltou ao início — mas não voltou. R$ 1.000 × 1,20 = R$ 1.200 × 0,80 = R$ 960. Você perdeu R$ 40. Matematicamente, perdas grandes são muito mais destrutivas do que ganhos altos. Isso se chama <em>assimetria de perdas</em>.</p>
+  <p>Um patrimônio que cresce 10% ao ano por 20 anos vale muito mais do que um que cresce 30% por 3 anos e perde 40% no quarto. <strong>Consistência supera especulação.</strong></p>
+</section>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- 2. PRIMEIROS 90 DIAS -->
+<!-- ═══════════════════════════════════════════════════ -->
+<section class="section" id="primeiros90">
+  <div class="section-header">
+    <div class="section-num">02</div>
+    <div class="section-title">Primeiros 90 Dias — Fase Crítica</div>
+  </div>
+
+  <div class="callout warning">
+    <div class="callout-title">Aviso Crítico</div>
+    <p>Os primeiros 90 dias são os mais perigosos. Não tome decisões irreversíveis de investimento nesse período. O objetivo é proteger, não lucrar.</p>
+  </div>
+
+  <h3>Semana 1–2: Ação imediata</h3>
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-left"><div class="tl-dot">1</div><div class="tl-line"></div></div>
+      <div class="tl-content">
+        <div class="tl-week">Dia 1–3</div>
+        <div class="tl-title">Estacionar o capital com segurança</div>
+        <div class="tl-desc">Mova imediatamente para CDB de liquidez diária de banco grande (Itaú, Bradesco, Santander) ou Tesouro Selic via corretora de confiança. Nunca deixe mais de R$ 250.000 em um único banco por conta da proteção do FGC. Divida em pelo menos 4 bancos distintos.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-left"><div class="tl-dot">2</div><div class="tl-line"></div></div>
+      <div class="tl-content">
+        <div class="tl-week">Dia 4–10</div>
+        <div class="tl-title">Separar contas: operacional vs. patrimonial</div>
+        <div class="tl-desc"><strong>Conta Operacional:</strong> Para despesas do dia a dia. Máximo R$ 30–50k nela. É onde seu salário da vida entra e sai. <strong>Conta Patrimonial:</strong> Onde fica o capital principal. Jamais misture. Essa separação é o primeiro ato de disciplina patrimonial.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-left"><div class="tl-dot">3</div><div class="tl-line"></div></div>
+      <div class="tl-content">
+        <div class="tl-week">Semana 2–4</div>
+        <div class="tl-title">Contratar contador e advogado patrimonial</div>
+        <div class="tl-desc">Antes de qualquer decisão de investimento relevante. O contador cuida da parte tributária; o advogado garante proteção legal e pode iniciar análise de holding familiar se for o caso. Custo: R$ 2.000–8.000/mês combinado, mas indispensável.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-left"><div class="tl-dot">4</div><div class="tl-line"></div></div>
+      <div class="tl-content">
+        <div class="tl-week">Mês 1–2</div>
+        <div class="tl-title">Educação financeira dirigida</div>
+        <div class="tl-desc">Não tome decisões grandes sem antes entender os produtos. Leia, converse com profissionais, faça perguntas. Nesse período, o dinheiro em CDB diário rende CDI (~10,5% ao ano em 2025) sem risco relevante.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-left"><div class="tl-dot">5</div><div class="tl-line"></div></div>
+      <div class="tl-content">
+        <div class="tl-week">Mês 2–3</div>
+        <div class="tl-title">Montar a carteira definitiva</div>
+        <div class="tl-desc">Só após entender cada produto, conversar com profissional de confiança e definir objetivos claros. A carteira completa é construída gradualmente, não de uma vez.</div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Proteção pelo FGC — Como funciona</h3>
+  <div class="callout info">
+    <div class="callout-title">FGC — Fundo Garantidor de Créditos</div>
+    <p>O FGC garante até <strong>R$ 250.000 por CPF por instituição financeira</strong>, com limite global de R$ 1.000.000 por CPF. Para proteger R$ 4 milhões, você precisa distribuir entre pelo menos 5 bancos diferentes E/ou usar produtos fora do FGC (Tesouro Direto é garantido pelo governo federal, não pelo FGC — e é mais seguro).</p>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Estratégia</th><th>Onde Alocar</th><th>Valor</th><th>Garantia</th></tr></thead>
+      <tbody>
+        <tr><td>Banco A (CDB)</td><td>Itaú Private</td><td class="td-num">R$ 250.000</td><td>FGC</td></tr>
+        <tr><td>Banco B (CDB)</td><td>Bradesco Prime</td><td class="td-num">R$ 250.000</td><td>FGC</td></tr>
+        <tr><td>Banco C (CDB)</td><td>BTG Pactual</td><td class="td-num">R$ 250.000</td><td>FGC</td></tr>
+        <tr><td>Banco D (CDB)</td><td>Safra</td><td class="td-num">R$ 250.000</td><td>FGC</td></tr>
+        <tr><td>Tesouro Selic</td><td>XP ou Rico</td><td class="td-num">R$ 2.500.000</td><td>Governo Federal</td></tr>
+        <tr><td>Conta operacional</td><td>Nubank/Inter</td><td class="td-num">R$ 50.000</td><td>FGC parcial</td></tr>
+        <tr><td class="td-gold">Total</td><td>—</td><td class="td-num td-gold">R$ 3.550.000</td><td>—</td></tr>
+        <tr><td>Caixa de reserva pessoal</td><td>Conta corrente</td><td class="td-num">R$ 450.000</td><td>FGC</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Comparativo de Bancos e Serviços Premium</h3>
+  <div class="bank-grid">
+    <div class="bank-card recommended">
+      <div class="bank-badge">Recomendado Principal</div>
+      <div class="bank-name">Itaú Personnalité / Private</div>
+      <p class="bank-pros">Solidez, atendimento dedicado, produtos exclusivos, maior rede</p>
+      <p class="bank-cons">Tarifas altas, produtos próprios às vezes com conflito de interesse</p>
+      <p style="font-size:0.82rem;margin-top:0.75rem;color:var(--ink-soft);">Private: acesso a partir de R$ 1 Mi. Gestão de patrimônio com bankers dedicados.</p>
+    </div>
+    <div class="bank-card recommended">
+      <div class="bank-badge">Recomendado Principal</div>
+      <div class="bank-name">BTG Pactual</div>
+      <p class="bank-pros">Melhor banco de investimentos do Brasil, produtos sofisticados, carteira gerida</p>
+      <p class="bank-cons">Foco mais em produtos próprios, atenção ao conflito de interesses</p>
+      <p style="font-size:0.82rem;margin-top:0.75rem;color:var(--ink-soft);">Private a partir de R$ 3 Mi. Excelente para quem quer gestão profissional.</p>
+    </div>
+    <div class="bank-card">
+      <div class="bank-badge neutral">Bom para Diversificar</div>
+      <div class="bank-name">XP Investimentos</div>
+      <p class="bank-pros">Maior plataforma de investimentos, acesso a centenas de produtos, taxa zero em muitos ETFs</p>
+      <p class="bank-cons">Assessores com conflito de interesse (ganham comissão), suporte às vezes inconsistente</p>
+      <p style="font-size:0.82rem;margin-top:0.75rem;color:var(--ink-soft);">Use como corretora, não como banco principal. Ótima para diversificar ativos.</p>
+    </div>
+    <div class="bank-card">
+      <div class="bank-badge neutral">Complementar</div>
+      <div class="bank-name">Bradesco Prime</div>
+      <p class="bank-pros">Solidez histórica, atendimento adequado, boa para CDB</p>
+      <p class="bank-cons">Produtos medianos, tecnologia atrasada</p>
+      <p style="font-size:0.82rem;margin-top:0.75rem;color:var(--ink-soft);">Use principalmente para diversificação bancária (FGC) e segurança.</p>
+    </div>
+    <div class="bank-card">
+      <div class="bank-badge neutral">Fintech Premium</div>
+      <div class="bank-name">Nubank Ultravioleta</div>
+      <p class="bank-pros">1% cashback em dólar, tecnologia excelente, sem anuidade, praticidade</p>
+      <p class="bank-cons">Não é banco patrimonial, limite da Nuconta não protegido eficientemente, sem atendimento dedicado</p>
+      <p style="font-size:0.82rem;margin-top:0.75rem;color:var(--ink-soft);">Use como conta operacional diária + cartão de crédito principal. Não para patrimônio.</p>
+    </div>
+    <div class="bank-card">
+      <div class="bank-badge neutral">Complementar</div>
+      <div class="bank-name">Safra Private</div>
+      <p class="bank-pros">Banco centenário, muito conservador, bom para renda fixa premium</p>
+      <p class="bank-cons">Menos digital, atendimento mais tradicional</p>
+      <p style="font-size:0.82rem;margin-top:0.75rem;color:var(--ink-soft);">Excelente para CDB de alto valor e diversificação bancária segura.</p>
+    </div>
+    <div class="bank-card">
+      <div class="bank-badge warn">Cuidado</div>
+      <div class="bank-name">Inter Black / C6 Carbon</div>
+      <p class="bank-pros">Cartões com bons benefícios, cashback, praticidade</p>
+      <p class="bank-cons">Fintechs mais jovens, menor solidez histórica, não indicadas para patrimônio grande</p>
+      <p style="font-size:0.82rem;margin-top:0.75rem;color:var(--ink-soft);">Podem ser cartões secundários, mas não repositórios patrimoniais.</p>
+    </div>
+    <div class="bank-card">
+      <div class="bank-badge neutral">Especialista</div>
+      <div class="bank-name">Santander Select</div>
+      <p class="bank-pros">Acesso internacional, conta em dólar, bom para viagens</p>
+      <p class="bank-cons">Produtos de investimento medianos no Brasil</p>
+      <p style="font-size:0.82rem;margin-top:0.75rem;color:var(--ink-soft);">Use principalmente pela dimensão internacional se viajar muito.</p>
+    </div>
+  </div>
+
+  <div class="callout success">
+    <div class="callout-title">Estrutura Bancária Recomendada</div>
+    <p>Use <strong>Itaú Private</strong> como banco principal (relação, atendimento, segurança), <strong>BTG Pactual</strong> para gestão de investimentos sofisticados, <strong>XP</strong> como corretora complementar, e <strong>Nubank Ultravioleta</strong> como conta de consumo diário. Safra ou Bradesco para diversificação de FGC.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- 3. RESERVA ESTRATÉGICA -->
+<!-- ═══════════════════════════════════════════════════ -->
+<section class="section" id="reserva">
+  <div class="section-header">
+    <div class="section-num">03</div>
+    <div class="section-title">Reserva Estratégica e Proteção</div>
+  </div>
+
+  <p>Um milionário estruturado não tem apenas "dinheiro guardado". Ele tem <em>camadas de capital</em>, cada uma com função, prazo e nível de liquidez específicos. Pense como uma cebola: várias camadas de proteção.</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Camada</th><th>Função</th><th>Valor</th><th>Onde</th><th>Liquidez</th><th>Rendimento Est.</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>🔴 Liquidez Imediata</td>
+          <td>Despesas do mês</td>
+          <td class="td-num">R$ 50.000</td>
+          <td>Conta corrente + Nubank</td>
+          <td>Imediata</td>
+          <td class="td-num">0 – 100% CDI</td>
+        </tr>
+        <tr>
+          <td>🟠 Emergência Milionária</td>
+          <td>Imprevistos grandes, 12 meses de despesas</td>
+          <td class="td-num">R$ 300.000</td>
+          <td>CDB diário + Tesouro Selic</td>
+          <td>D+0 / D+1</td>
+          <td class="td-num">100% CDI (~10,5%)</td>
+        </tr>
+        <tr>
+          <td>🟡 Caixa de Oportunidade</td>
+          <td>Aproveitar crises, imóveis baratos, ações em queda</td>
+          <td class="td-num">R$ 400.000</td>
+          <td>Tesouro Selic / LCI curta</td>
+          <td>D+1 / D+30</td>
+          <td class="td-num">IPCA+4% ou CDI</td>
+        </tr>
+        <tr>
+          <td>🟢 Proteção Cambial</td>
+          <td>Hedge contra desvalorização do real</td>
+          <td class="td-num">R$ 400.000</td>
+          <td>ETF IVVB11 / BDRs / dólar</td>
+          <td>D+2 (B3)</td>
+          <td class="td-num">Dólar + S&P500</td>
+        </tr>
+        <tr>
+          <td>🔵 Proteção Inflacionária</td>
+          <td>Ganho real acima do IPCA</td>
+          <td class="td-num">R$ 600.000</td>
+          <td>Tesouro IPCA+ 2035/2045</td>
+          <td>Médio prazo</td>
+          <td class="td-num">IPCA + 6–7%</td>
+        </tr>
+        <tr>
+          <td>⚫ Capital Patrimonial</td>
+          <td>Crescimento de longo prazo</td>
+          <td class="td-num">R$ 2.250.000</td>
+          <td>Carteira diversificada</td>
+          <td>Variável</td>
+          <td class="td-num">IPCA + 5–8%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Por que reserva de emergência milionária é diferente</h3>
+  <p>Quando se tem R$ 4 milhões, a "emergência" tem outra dimensão. Não é "perdi o emprego". É "preciso de R$ 200.000 para uma ação judicial urgente" ou "oportunidade de comprar imóvel abaixo do preço". Sua reserva precisa ser proporcionalmente maior — idealmente 6 a 12 meses de seu custo de vida pretendido, mais um colchão de oportunidade.</p>
+</section>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- 4. CARTEIRA DE INVESTIMENTOS -->
+<!-- ═══════════════════════════════════════════════════ -->
+<section class="section" id="carteira">
+  <div class="section-header">
+    <div class="section-num">04</div>
+    <div class="section-title">Estratégia de Investimento Completa</div>
+  </div>
+
+  <h3>Alocação Recomendada — R$ 4.000.000</h3>
+  <p>A carteira abaixo é conservadora-moderada, focada em preservar capital com crescimento real acima da inflação, sem concentração excessiva em ativos de risco.</p>
+
+  <!-- Allocation bars -->
+  <div style="margin: 2rem 0;">
+    <div class="alloc-item">
+      <div class="alloc-header"><span class="alloc-name">Renda Fixa (Tesouro + CDB + LCI/LCA)</span><span class="alloc-vals">50% · R$ 2.000.000</span></div>
+      <div class="alloc-bar"><div class="alloc-fill" style="width:50%;background:#2D6A4F;"></div></div>
+    </div>
+    <div class="alloc-item">
+      <div class="alloc-header"><span class="alloc-name">Fundos Imobiliários (FIIs)</span><span class="alloc-vals">15% · R$ 600.000</span></div>
+      <div class="alloc-bar"><div class="alloc-fill" style="width:15%;background:#C9A84C;"></div></div>
+    </div>
+    <div class="alloc-item">
+      <div class="alloc-header"><span class="alloc-name">Renda Variável Brasil (Ações + ETFs)</span><span class="alloc-vals">10% · R$ 400.000</span></div>
+      <div class="alloc-bar"><div class="alloc-fill" style="width:10%;background:#9B2226;"></div></div>
+    </div>
+    <div class="alloc-item">
+      <div class="alloc-header"><span class="alloc-name">Internacional (ETFs + REITs + dólar)</span><span class="alloc-vals">15% · R$ 600.000</span></div>
+      <div class="alloc-bar"><div class="alloc-fill" style="width:15%;background:#1D3D6B;"></div></div>
+    </div>
+    <div class="alloc-item">
+      <div class="alloc-header"><span class="alloc-name">Ouro e Proteções Reais</span><span class="alloc-vals">5% · R$ 200.000</span></div>
+      <div class="alloc-bar"><div class="alloc-fill" style="width:5%;background:#8B6914;"></div></div>
+    </div>
+    <div class="alloc-item">
+      <div class="alloc-header"><span class="alloc-name">Caixa / Liquidez Imediata</span><span class="alloc-vals">5% · R$ 200.000</span></div>
+      <div class="alloc-bar"><div class="alloc-fill" style="width:5%;background:#6B6355;"></div></div>
+    </div>
+  </div>
+
+  <!-- Charts -->
+  <div class="chart-wrap">
+    <div class="chart-title">Distribuição da Carteira Patrimonial</div>
+    <div style="display:flex; flex-wrap:wrap; gap:16px; margin-bottom:12px; font-size:12px; color:var(--ink-soft);">
+      <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:2px;background:#2D6A4F;"></span>Renda Fixa 50%</span>
+      <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:2px;background:#C9A84C;"></span>FIIs 15%</span>
+      <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:2px;background:#9B2226;"></span>Ações BR 10%</span>
+      <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:2px;background:#1D3D6B;"></span>Internacional 15%</span>
+      <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:2px;background:#8B6914;"></span>Ouro 5%</span>
+      <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:2px;background:#6B6355;"></span>Caixa 5%</span>
+    </div>
+    <div style="position:relative;width:100%;height:280px;">
+      <canvas id="pieChart" role="img" aria-label="Gráfico de pizza da alocação patrimonial: Renda Fixa 50%, FIIs 15%, Internacional 15%, Ações 10%, Ouro 5%, Caixa 5%">Renda Fixa 50%, FIIs 15%, Internacional 15%, Ações 10%, Ouro 5%, Caixa 5%.</canvas>
+    </div>
+  </div>
+
+  <h3>Detalhamento da Renda Fixa — R$ 2.000.000</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Produto</th><th>Valor</th><th>%</th><th>Rendimento Estimado</th><th>Tributação</th><th>Liquidez</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Tesouro Selic 2027</td>
+          <td class="td-num">R$ 500.000</td>
+          <td class="td-num">12,5%</td>
+          <td class="td-num td-green">~100% CDI (10,5%)</td>
+          <td>IR tabela regressiva</td>
+          <td>D+1</td>
+        </tr>
+        <tr>
+          <td>Tesouro IPCA+ 2035</td>
+          <td class="td-num">R$ 400.000</td>
+          <td class="td-num">10%</td>
+          <td class="td-num td-green">IPCA + 6,5%</td>
+          <td>IR tabela regressiva</td>
+          <td>Médio prazo</td>
+        </tr>
+        <tr>
+          <td>Tesouro IPCA+ 2045</td>
+          <td class="td-num">R$ 300.000</td>
+          <td class="td-num">7,5%</td>
+          <td class="td-num td-green">IPCA + 6,8%</td>
+          <td>IR tabela regressiva</td>
+          <td>Longo prazo</td>
+        </tr>
+        <tr>
+          <td>CDB 110–115% CDI (bancos médios)</td>
+          <td class="td-num">R$ 300.000</td>
+          <td class="td-num">7,5%</td>
+          <td class="td-num td-green">11,5–12% aa</td>
+          <td>IR tabela regressiva</td>
+          <td>D+0 a D+90</td>
+        </tr>
+        <tr>
+          <td>LCI / LCA (isentas)</td>
+          <td class="td-num">R$ 300.000</td>
+          <td class="td-num">7,5%</td>
+          <td class="td-num td-green">~90–95% CDI ISENTO</td>
+          <td>Isento IR pessoa física</td>
+          <td>D+90 mínimo</td>
+        </tr>
+        <tr>
+          <td>Debêntures Incentivadas</td>
+          <td class="td-num">R$ 200.000</td>
+          <td class="td-num">5%</td>
+          <td class="td-num td-green">IPCA + 7–9%</td>
+          <td>Isento IR pessoa física</td>
+          <td>B3 (mercado sec.)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-title">Por que LCI/LCA mesmo com percentual menor?</div>
+    <p>Uma LCA que rende 90% do CDI (9,45% ao ano) <strong>é melhor</strong> que um CDB que rende 100% do CDI (10,5%) — porque o LCI/LCA é isento de IR para pessoa física. Para comparar corretamente, use a fórmula: Rendimento Líquido CDB = Taxa bruta × (1 – alíquota IR). Com alíquota de 15% (prazo > 2 anos): 10,5% × 0,85 = 8,92% líquido. A LCA a 9,45% ISENTA é superior.</p>
+  </div>
+
+  <h3>Fundos Imobiliários — R$ 600.000</h3>
+  <p>FIIs pagam rendimentos mensais isentos de IR para pessoa física sobre os dividendos. São como "aluguéis de imóveis" sem burocracia de proprietário. A carteira de FIIs deve ser diversificada entre tipos:</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Tipo de FII</th><th>Exemplos</th><th>Valor</th><th>Div Yield Médio</th><th>Característica</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>FIIs de Tijolo (imóveis físicos)</td>
+          <td>HGLG11, BRCO11, XPML11</td>
+          <td class="td-num">R$ 250.000</td>
+          <td class="td-num td-green">7–10% aa</td>
+          <td>Galpões, shoppings, lajes</td>
+        </tr>
+        <tr>
+          <td>FIIs de Papel (CRIs)</td>
+          <td>MXRF11, KNCR11, KNIP11</td>
+          <td class="td-num">R$ 200.000</td>
+          <td class="td-num td-green">12–15% aa</td>
+          <td>Indexados IPCA/CDI</td>
+        </tr>
+        <tr>
+          <td>FIIs de Fundo de Fundos</td>
+          <td>BCFF11, RBRF11</td>
+          <td class="td-num">R$ 100.000</td>
+          <td class="td-num td-green">8–11% aa</td>
+          <td>Diversificação automática</td>
+        </tr>
+        <tr>
+          <td>ETF de FIIs (IFIX11)</td>
+          <td>IFIX11</td>
+          <td class="td-num">R$ 50.000</td>
+          <td class="td-num td-green">7–9% aa</td>
+          <td>Índice do setor</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Renda Variável Brasil — R$ 400.000</h3>
+  <p>Ações brasileiras têm maior risco mas também maior potencial de crescimento. Para perfil conservador, a exposição deve ser limitada e concentrada em empresas sólidas e pagadoras de dividendos.</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Estratégia</th><th>Valor</th><th>Exemplos</th><th>Objetivo</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>ETF BOVA11 (Ibovespa)</td>
+          <td class="td-num">R$ 150.000</td>
+          <td>BOVA11</td>
+          <td>Exposição ampla ao Brasil</td>
+        </tr>
+        <tr>
+          <td>Ações de Dividendos</td>
+          <td class="td-num">R$ 150.000</td>
+          <td>BBAS3, ITUB4, WEGE3</td>
+          <td>Renda + crescimento</td>
+        </tr>
+        <tr>
+          <td>ETF Small Caps</td>
+          <td class="td-num">R$ 100.000</td>
+          <td>SMAL11</td>
+          <td>Crescimento de longo prazo</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Internacional — R$ 600.000</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Ativo</th><th>Valor</th><th>Descrição</th><th>Risco</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>IVVB11 (S&P 500 em reais)</td>
+          <td class="td-num">R$ 200.000</td>
+          <td>ETF que replica S&P 500 em BRL</td>
+          <td>Cambial + mercado EUA</td>
+        </tr>
+        <tr>
+          <td>BDRs de empresas globais</td>
+          <td class="td-num">R$ 150.000</td>
+          <td>Apple, Microsoft, Amazon via B3</td>
+          <td>Empresa + câmbio</td>
+        </tr>
+        <tr>
+          <td>Dólar (operação de câmbio)</td>
+          <td class="td-num">R$ 150.000</td>
+          <td>Proteção cambial pura</td>
+          <td>Câmbio</td>
+        </tr>
+        <tr>
+          <td>ETF de REITs (via BDR)</td>
+          <td class="td-num">R$ 100.000</td>
+          <td>Imóveis americanos</td>
+          <td>Imobiliário EUA + câmbio</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Projeção de Crescimento Patrimonial</h3>
+  <div class="chart-wrap">
+    <div class="chart-title">Evolução do patrimônio em 3 cenários (em R$ milhões)</div>
+    <div style="display:flex;flex-wrap:wrap;gap:16px;margin-bottom:12px;font-size:12px;color:var(--ink-soft);">
+      <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:2px;background:#2D6A4F;"></span>Conservador (~8% aa real)</span>
+      <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:2px;background:#C9A84C;"></span>Moderado (~11% aa)</span>
+      <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:2px;background:#9B2226;"></span>Pessimista (~5% aa)</span>
+    </div>
+    <div style="position:relative;width:100%;height:300px;">
+      <canvas id="growthChart" role="img" aria-label="Gráfico de crescimento patrimonial de 4 milhões ao longo de 20 anos em 3 cenários">Projeção de crescimento patrimonial em 3 cenários ao longo de 20 anos.</canvas>
+    </div>
+  </div>
+
+  <div class="scenario-wrap">
+    <div class="scenario-col pessimista">
+      <div class="scenario-header">Pessimista</div>
+      <div class="scenario-rate">5% aa</div>
+      <div class="scenario-sub">Cenário de crise prolongada</div>
+      <div class="scenario-detail">
+        <strong>5 anos:</strong> R$ 5,1 Mi<br>
+        <strong>10 anos:</strong> R$ 6,5 Mi<br>
+        <strong>20 anos:</strong> R$ 10,6 Mi<br><br>
+        Inflação corroendo retornos, Selic em queda, crise fiscal.
+      </div>
+    </div>
+    <div class="scenario-col moderado">
+      <div class="scenario-header">Conservador</div>
+      <div class="scenario-rate">8% aa</div>
+      <div class="scenario-sub">Cenário base recomendado</div>
+      <div class="scenario-detail">
+        <strong>5 anos:</strong> R$ 5,9 Mi<br>
+        <strong>10 anos:</strong> R$ 8,6 Mi<br>
+        <strong>20 anos:</strong> R$ 18,6 Mi<br><br>
+        Selic em patamar neutro, inflação controlada, gestão disciplinada.
+      </div>
+    </div>
+    <div class="scenario-col otimista">
+      <div class="scenario-header">Otimista</div>
+      <div class="scenario-rate">11% aa</div>
+      <div class="scenario-sub">Com boa gestão ativa</div>
+      <div class="scenario-detail">
+        <strong>5 anos:</strong> R$ 6,7 Mi<br>
+        <strong>10 anos:</strong> R$ 11,4 Mi<br>
+        <strong>20 anos:</strong> R$ 32,6 Mi<br><br>
+        Mercado favorável, gestão profissional, diversificação global acertada.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- 5. RENDA PASSIVA -->
+<!-- ═══════════════════════════════════════════════════ -->
+<section class="section" id="renda">
+  <div class="section-header">
+    <div class="section-num">05</div>
+    <div class="section-title">Renda Passiva e Qualidade de Vida</div>
+  </div>
+
+  <h3>A Regra de Saque Seguro</h3>
+  <p>A regra dos 4% (famosa nos EUA) sugere que você pode sacar 4% do patrimônio ao ano sem esgotá-lo em 30 anos. No Brasil, com inflação historicamente mais alta e juros reais maiores, a regra pode ser adaptada para <strong>4% a 5% ao ano</strong> em cenário conservador.</p>
+
+  <div class="stat-row">
+    <div class="stat-item">
+      <div class="stat-label">Saque Anual Seguro (4%)</div>
+      <div class="stat-val gold">R$ 160.000</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-label">Renda Mensal Segura</div>
+      <div class="stat-val green">R$ 13.333</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-label">Saque Confortável (5%)</div>
+      <div class="stat-val">R$ 200.000/ano</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-label">Renda Mensal Confortável</div>
+      <div class="stat-val green">R$ 16.666</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-label">Saque Arriscado (7%+)</div>
+      <div class="stat-val red">R$ 280.000/ano</div>
+    </div>
+  </div>
+
+  <div class="callout warning">
+    <div class="callout-title">Atenção: Imposto sobre a Renda</div>
+    <p>Essas estimativas são <strong>brutas</strong>. Sobre os rendimentos incidem IR e IOF dependendo do produto. Considere que a renda líquida mensal disponível pode ser 15–20% menor após impostos, dependendo de como a carteira está estruturada. Por isso, a eficiência tributária da seção 6 é fundamental.</p>
+  </div>
+
+  <h3>Três Cenários de Vida</h3>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-label">Vida Extremamente Conservadora</div>
+      <div class="card-value">R$ 10.000/mês</div>
+      <p style="font-size:0.82rem;margin-top:0.5rem;">Retira apenas 3% ao ano. O patrimônio cresce continuamente mesmo com retirada. Em 10 anos, pode retirar mais. Ideal para quem tem outra renda ou é jovem.</p>
+    </div>
+    <div class="card">
+      <div class="card-label">Vida Confortável (Recomendada)</div>
+      <div class="card-value">R$ 16.000/mês</div>
+      <p style="font-size:0.82rem;margin-top:0.5rem;">Retira ~5% ao ano. O patrimônio mantém-se real (corrigido pela inflação). Viagens, qualidade de vida, sem luxos excessivos. Sustentável indefinidamente.</p>
+    </div>
+    <div class="card">
+      <div class="card-label">Vida Luxuosa</div>
+      <div class="card-value">R$ 25.000/mês</div>
+      <p style="font-size:0.82rem;margin-top:0.5rem;">Retira ~7,5% ao ano. O patrimônio encolhe em termos reais. Em 15–20 anos, os recursos podem se esgotar se não houver crescimento adicional. Exige gestão muito ativa.</p>
+    </div>
+  </div>
+
+  <h3>Renda Estimada da Carteira (Mensal, sem vender nada)</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Fonte</th><th>Capital</th><th>Yield Estimado</th><th>Renda Mensal Bruta</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Renda Fixa (Tesouro + CDB)</td>
+          <td class="td-num">R$ 1.700.000</td>
+          <td class="td-num">10,5% aa</td>
+          <td class="td-num td-green">R$ 14.875</td>
+        </tr>
+        <tr>
+          <td>LCI / LCA (isento)</td>
+          <td class="td-num">R$ 300.000</td>
+          <td class="td-num">9,5% aa</td>
+          <td class="td-num td-green">R$ 2.375</td>
+        </tr>
+        <tr>
+          <td>FIIs (dividendos)</td>
+          <td class="td-num">R$ 600.000</td>
+          <td class="td-num">10% aa (div yield)</td>
+          <td class="td-num td-green">R$ 5.000</td>
+        </tr>
+        <tr>
+          <td>Ações (dividendos)</td>
+          <td class="td-num">R$ 150.000</td>
+          <td class="td-num">6% aa</td>
+          <td class="td-num td-green">R$ 750</td>
+        </tr>
+        <tr>
+          <td>Internacional (reinvestido)</td>
+          <td class="td-num">R$ 600.000</td>
+          <td class="td-num">Apreciação</td>
+          <td class="td-num">—</td>
+        </tr>
+        <tr>
+          <td style="font-weight:700;" class="td-gold">Total Bruto Estimado</td>
+          <td class="td-num">—</td>
+          <td class="td-num">—</td>
+          <td class="td-num td-gold" style="font-size:1.1rem;">R$ 23.000</td>
+        </tr>
+        <tr>
+          <td>Impostos estimados</td>
+          <td>—</td>
+          <td>—</td>
+          <td class="td-num td-red">- R$ 4.000</td>
+        </tr>
+        <tr>
+          <td style="font-weight:700;" class="td-green">Total Líquido Estimado</td>
+          <td>—</td>
+          <td>—</td>
+          <td class="td-num td-green" style="font-size:1.1rem;">~R$ 19.000</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- 6. TRIBUTAÇÃO -->
+<!-- ═══════════════════════════════════════════════════ -->
+<section class="section" id="tributario">
+  <div class="section-header">
+    <div class="section-num">06</div>
+    <div class="section-title">Eficiência Tributária e Proteção Legal</div>
+  </div>
+
+  <h3>Como funciona a tributação no Brasil</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Produto</th><th>Tributação</th><th>Alíquota</th><th>Observação</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>CDB / Tesouro Direto</td>
+          <td>Tabela regressiva IR</td>
+          <td class="td-num">22,5% a 15%</td>
+          <td>Prazo maior = IR menor. Acima de 720 dias: 15%</td>
+        </tr>
+        <tr>
+          <td>LCI / LCA</td>
+          <td>Isento</td>
+          <td class="td-num td-green">0%</td>
+          <td>Pessoa física isenta completamente</td>
+        </tr>
+        <tr>
+          <td>Debêntures Incentivadas</td>
+          <td>Isento</td>
+          <td class="td-num td-green">0%</td>
+          <td>Lei 12.431 — infraestrutura</td>
+        </tr>
+        <tr>
+          <td>FIIs (dividendos)</td>
+          <td>Isento (dividendos)</td>
+          <td class="td-num td-green">0%</td>
+          <td>Ganho de capital na venda: 20%</td>
+        </tr>
+        <tr>
+          <td>Ações (dividendos)</td>
+          <td>Isento (hoje)</td>
+          <td class="td-num td-green">0%</td>
+          <td>Atenção: em debate tributação no Congresso</td>
+        </tr>
+        <tr>
+          <td>Ações (ganho de capital)</td>
+          <td>IR sobre lucro</td>
+          <td class="td-num">15–22,5%</td>
+          <td>Isento até R$ 20k/mês em vendas</td>
+        </tr>
+        <tr>
+          <td>ETFs de ações</td>
+          <td>IR sobre lucro</td>
+          <td class="td-num">15%</td>
+          <td>Sem isenção de R$ 20k</td>
+        </tr>
+        <tr>
+          <td>Investimentos no exterior</td>
+          <td>Carnê-leão mensal</td>
+          <td class="td-num">15–22,5%</td>
+          <td>Obrigatório declarar ao BACEN e Receita</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Tabela Regressiva de IR (Renda Fixa)</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Prazo da Aplicação</th><th>Alíquota IR</th></tr></thead>
+      <tbody>
+        <tr><td>Até 180 dias</td><td class="td-num td-red">22,5%</td></tr>
+        <tr><td>181 a 360 dias</td><td class="td-num td-red">20%</td></tr>
+        <tr><td>361 a 720 dias</td><td class="td-num">17,5%</td></tr>
+        <tr><td>Acima de 720 dias</td><td class="td-num td-green">15%</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Holding Familiar — Quando Vale?</h3>
+  <p>A holding familiar é uma empresa criada para centralizar e gerir patrimônio da família. Tem custos de abertura e manutenção, mas pode oferecer vantagens importantes.</p>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-label">Vale abrir quando...</div>
+      <ul style="font-size:0.85rem;padding-left:1.2rem;margin-top:0.5rem;">
+        <li>Patrimônio acima de R$ 3–5 Mi</li>
+        <li>Múltiplos imóveis</li>
+        <li>Planejamento sucessório familiar</li>
+        <li>Distribuição de lucros a sócios (dividendos isentos de PF)</li>
+        <li>Necessidade de blindagem patrimonial</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-label">Não vale quando...</div>
+      <ul style="font-size:0.85rem;padding-left:1.2rem;margin-top:0.5rem;">
+        <li>Patrimônio apenas em renda fixa/ações</li>
+        <li>Pessoa solteira, sem herdeiros</li>
+        <li>Custo de manutenção supera benefício</li>
+        <li>Sem imóveis no patrimônio</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout">
+    <div class="callout-title">Custo real de uma holding</div>
+    <p>Abertura: R$ 5.000–15.000 (advocacia + contabilidade). Manutenção: R$ 1.500–4.000/mês (contador, declarações, CNPJ ativo). Avalie com seu contador se os benefícios superam esses custos para o seu caso específico.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- 7. INTERNACIONALIZAÇÃO -->
+<!-- ═══════════════════════════════════════════════════ -->
+<section class="section" id="internacional">
+  <div class="section-header">
+    <div class="section-num">07</div>
+    <div class="section-title">Internacionalização Patrimonial</div>
+  </div>
+
+  <h3>Faz sentido ter parte do patrimônio fora do Brasil?</h3>
+  <p>Sim. Para patrimônios acima de R$ 1 milhão, expor de 10% a 20% ao exterior é recomendado. O Brasil apresenta riscos sistêmicos que nenhum investimento local mitiga: risco político, desvalorização cambial estrutural, inflação, e instabilidade regulatória.</p>
+
+  <div class="callout info">
+    <div class="callout-title">Recomendação para R$ 4 Milhões</div>
+    <p>Manter de 15% a 20% do patrimônio em ativos dolarizados (R$ 600.000 a R$ 800.000). Isso não é especulação cambial — é proteção contra risco-Brasil.</p>
+  </div>
+
+  <h3>Formas de internacionalizar (acessíveis no Brasil)</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Forma</th><th>Como</th><th>Vantagem</th><th>Complexidade</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>IVVB11</td>
+          <td>ETF na B3 em reais</td>
+          <td>Sem burocracia cambial, replica S&P 500</td>
+          <td>Baixa</td>
+        </tr>
+        <tr>
+          <td>BDRs</td>
+          <td>Ações globais na B3</td>
+          <td>Sem conta exterior, em reais</td>
+          <td>Baixa</td>
+        </tr>
+        <tr>
+          <td>Conta no exterior (remessa)</td>
+          <td>Avenue, Interactive Brokers</td>
+          <td>Acesso direto a ETFs americanos</td>
+          <td>Média</td>
+        </tr>
+        <tr>
+          <td>Fundos cambiais/internacionais</td>
+          <td>Via corretoras brasileiras</td>
+          <td>Gestão profissional</td>
+          <td>Baixa</td>
+        </tr>
+        <tr>
+          <td>Conta bancária no exterior</td>
+          <td>EUA, Portugal, Suíça</td>
+          <td>Segurança jurídica internacional</td>
+          <td>Alta</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Residência Fiscal — Quando considerar?</h3>
+  <p>Para patrimônios de R$ 4 milhões, <strong>mudança de residência fiscal ainda não é prioritária</strong>. Começa a fazer sentido acima de R$ 20–30 milhões, quando a tributação sobre ganhos e herança em outros países pode ser vantajosa. Antes disso, os custos e a burocracia superam os benefícios.</p>
+  <p>Países usados por brasileiros: Portugal (NHR encerrado em 2024 para novos residentes), Emirados Árabes, Paraguai, Uruguai. Cada caso exige análise de advogado tributário internacional.</p>
+
+  <div class="callout warning">
+    <div class="callout-title">Obrigações ao investir no exterior</div>
+    <p>Todo brasileiro com mais de USD 1.000.000 em ativos no exterior deve declarar ao Banco Central (CBE — Capitais Brasileiros no Exterior). Rendimentos no exterior devem ser declarados mensalmente via carnê-leão e incluídos na DIRPF. Não cumprir essas obrigações é crime de evasão de divisas.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- 8. COMPORTAMENTO -->
+<!-- ═══════════════════════════════════════════════════ -->
+<section class="section" id="comportamento">
+  <div class="section-header">
+    <div class="section-num">08</div>
+    <div class="section-title">Comportamento Financeiro de um Milionário</div>
+  </div>
+
+  <h3>Os maiores erros psicológicos</h3>
+  <ul class="error-list">
+    <li><strong>Lifestyle inflation:</strong> Você começa a gastar proporcionalmente mais porque "pode". Trocar de carro antes do planejado, reformas desnecessárias, viagens que não caberiam antes. Cada real gasto é um real que não rende.</li>
+    <li><strong>Efeito riqueza falso:</strong> Sentir-se rico por ter dinheiro na conta — e não por ter renda gerada por esse dinheiro. Dinheiro parado não é riqueza; renda é riqueza.</li>
+    <li><strong>"Dinheiro fácil" para negócios:</strong> Entrar em sociedade ou financiar negócios de conhecidos. Estatisticamente, a maioria dos pequenos negócios fecha em 5 anos. Nunca invista em negócios de terceiros mais do que pode perder sem prejudicar o planejamento.</li>
+    <li><strong>Risco de ostentação:</strong> Mostrar riqueza publicamente atrai golpes, pedidos, inveja e riscos de segurança. Milionários inteligentes são discretos.</li>
+    <li><strong>Decisões emocionais no mercado:</strong> Vender na queda e comprar na alta é o maior destruidor de patrimônio em renda variável. Quem ficou parado durante a pandemia de 2020 se saiu muito melhor do que quem vendeu no pânico.</li>
+    <li><strong>Excesso de confiança após sucesso inicial:</strong> Ganhar 30% em uma aposta não te torna especialista. Humildade epistêmica é fundamental.</li>
+  </ul>
+
+  <div class="callout">
+    <div class="callout-title">Como Pensar como Milionário de Longo Prazo</div>
+    <p>Pense em fluxo, não em valor. Não pense "tenho R$ 4 milhões". Pense "tenho R$ 19.000/mês de renda passiva". A segunda forma de pensar te protege de gastar o principal e te orienta a crescer a renda — não o saldo.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- 9. CARTÕES -->
+<!-- ═══════════════════════════════════════════════════ -->
+<section class="section" id="cartoes">
+  <div class="section-header">
+    <div class="section-num">09</div>
+    <div class="section-title">Cartões Inteligentes e Uso Estratégico</div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Cartão</th><th>Anuidade</th><th>Benefício Principal</th><th>Para Quem</th><th>Avaliação</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Nubank Ultravioleta</td>
+          <td class="td-num">R$ 49/mês</td>
+          <td>1% cashback em dólar, Mastercard Black</td>
+          <td>Uso diário, fácil</td>
+          <td class="td-green">⭐⭐⭐⭐⭐</td>
+        </tr>
+        <tr>
+          <td>Itaú Personnalité (Visa Infinite)</td>
+          <td class="td-num">R$ 75/mês</td>
+          <td>Salas VIP LoungeKey, pontos Itaucard</td>
+          <td>Viajante frequente</td>
+          <td class="td-green">⭐⭐⭐⭐</td>
+        </tr>
+        <tr>
+          <td>Bradesco Elo Nanquim</td>
+          <td class="td-num">R$ 83/mês</td>
+          <td>LoungeKey ilimitado, seguro viagem</td>
+          <td>Quem viaja muito</td>
+          <td class="td-green">⭐⭐⭐⭐</td>
+        </tr>
+        <tr>
+          <td>Amex Platinum</td>
+          <td class="td-num">R$ 149/mês</td>
+          <td>Amex Centurion lounges, Membership Rewards</td>
+          <td>Viagens internacionais luxury</td>
+          <td>⭐⭐⭐</td>
+        </tr>
+        <tr>
+          <td>Amex The Centurion (Black)</td>
+          <td class="td-num">Por convite</td>
+          <td>Concierge, upgrades, salas exclusivas</td>
+          <td>Gasto muito alto (&gt;R$ 500k/ano)</td>
+          <td class="td-gold">Nicho</td>
+        </tr>
+        <tr>
+          <td>C6 Carbon</td>
+          <td class="td-num">R$ 0 (condicional)</td>
+          <td>Cashback, praticidade</td>
+          <td>Complementar</td>
+          <td>⭐⭐⭐</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Estratégia inteligente de cartões</h3>
+  <div class="callout success">
+    <div class="callout-title">Estratégia Recomendada (2 cartões)</div>
+    <p><strong>Principal:</strong> Nubank Ultravioleta — cashback em dólar é proteção cambial natural e benefício real. <strong>Secundário:</strong> Itaú Personnalité Visa Infinite para viagens (salas VIP, seguro). Dois cartões são suficientes. Mais do que isso é complexidade sem benefício adicional.</p>
+  </div>
+
+  <h3>Quando pagar à vista vs. parcelar</h3>
+  <p>Com R$ 4 milhões gerando ~10,5% ao ano, cada R$ 1.000 que você mantém investido gera R$ 8,75/mês. Se parcelar uma compra de R$ 10.000 em 10x sem juros, você mantém R$ 10.000 a mais investido por 10 meses — gerando aproximadamente R$ 875 adicionais. <strong>Parcelar sem juros é sempre vantajoso</strong> para quem tem capital investido com boa rentabilidade.</p>
+</section>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- 10. EQUIPE -->
+<!-- ═══════════════════════════════════════════════════ -->
+<section class="section" id="equipe">
+  <div class="section-header">
+    <div class="section-num">10</div>
+    <div class="section-title">Equipe Profissional Ideal</div>
+  </div>
+
+  <p>Um patrimônio de R$ 4 milhões não pode ser gerido sozinho — e a economia com profissionais é frequentemente o maior erro de pessoas que herdam dinheiro. O custo dos profissionais é marginal diante do que eles protegem e economizam.</p>
+
+  <div class="pro-grid">
+    <div class="pro-card">
+      <div class="pro-role">Prioridade Alta</div>
+      <div class="pro-title">Planejador Financeiro CFP®</div>
+      <div class="pro-cost">R$ 2.000–5.000/mês ou fee fixo</div>
+      <div class="pro-desc">Cria e monitora o plano patrimonial completo. Independente, sem conflito de interesses. O CFP é certificado internacionalmente. Prioridade máxima.</div>
+    </div>
+    <div class="pro-card">
+      <div class="pro-role">Prioridade Alta</div>
+      <div class="pro-title">Contador Especializado em PF</div>
+      <div class="pro-cost">R$ 1.500–4.000/mês</div>
+      <div class="pro-desc">Declaração de IR, planejamento tributário, carnê-leão internacional, GCAP (ganho de capital). Essencial desde o início.</div>
+    </div>
+    <div class="pro-card">
+      <div class="pro-role">Prioridade Média</div>
+      <div class="pro-title">Advogado Patrimonial</div>
+      <div class="pro-cost">R$ 3.000–8.000/mês</div>
+      <div class="pro-desc">Proteção patrimonial, blindagem, sucessão, holding familiar, contratos. Consultar antes de qualquer estrutura jurídica.</div>
+    </div>
+    <div class="pro-card">
+      <div class="pro-role">Prioridade Média</div>
+      <div class="pro-title">Gestor de Investimentos (ANBIMA)</div>
+      <div class="pro-cost">0,5–1% aa sobre patrimônio</div>
+      <div class="pro-desc">Gestão ativa da carteira. Alternativa ao BTG Private. Escolha gestores com track record mínimo de 5 anos e auditados.</div>
+    </div>
+    <div class="pro-card">
+      <div class="pro-role">Quando necessário</div>
+      <div class="pro-title">Advogado Tributário Internacional</div>
+      <div class="pro-cost">Fee por projeto</div>
+      <div class="pro-desc">Se internacionalizar patrimônio acima de R$ 500k. CBE, tributação de renda exterior, estrutura offshore se aplicável.</div>
+    </div>
+  </div>
+
+  <h3>Como identificar assessores ruins</h3>
+  <ul class="error-list">
+    <li>Promete rentabilidade específica ou "garantida"</li>
+    <li>Recomenda produtos sem explicar todos os custos e riscos</li>
+    <li>Ganha comissão por produto que recomenda (conflito de interesse)</li>
+    <li>Pressiona para decidir rápido ("oferta por tempo limitado")</li>
+    <li>Não tem certificação verificável (CPA-10, CPA-20, CFP, CGA)</li>
+    <li>Não consegue explicar de forma simples o que está recomendando</li>
+  </ul>
+</section>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- 11. PLANO REAL -->
+<!-- ═══════════════════════════════════════════════════ -->
+<section class="section" id="plano">
+  <div class="section-header">
+    <div class="section-num">11</div>
+    <div class="section-title">Plano Prático Completo</div>
+  </div>
+
+  <div class="final-block">
+    <h3>Distribuição Exata dos R$ 4.000.000</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Destino</th><th>Onde</th><th>Valor</th><th>%</th><th>Renda/mês</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Conta operacional</td>
+            <td>Nubank + Itaú</td>
+            <td class="td-num">R$ 50.000</td>
+            <td class="td-num">1,25%</td>
+            <td class="td-num">—</td>
+          </tr>
+          <tr>
+            <td>Reserva emergência (CDB diário)</td>
+            <td>Itaú + Bradesco + Safra</td>
+            <td class="td-num">R$ 300.000</td>
+            <td class="td-num">7,5%</td>
+            <td class="td-num">R$ 2.625</td>
+          </tr>
+          <tr>
+            <td>Caixa de oportunidade</td>
+            <td>Tesouro Selic</td>
+            <td class="td-num">R$ 400.000</td>
+            <td class="td-num">10%</td>
+            <td class="td-num">R$ 3.500</td>
+          </tr>
+          <tr>
+            <td>Tesouro IPCA+ 2035</td>
+            <td>Tesouro Direto / XP</td>
+            <td class="td-num">R$ 400.000</td>
+            <td class="td-num">10%</td>
+            <td class="td-num">R$ 3.500</td>
+          </tr>
+          <tr>
+            <td>Tesouro IPCA+ 2045</td>
+            <td>Tesouro Direto / XP</td>
+            <td class="td-num">R$ 300.000</td>
+            <td class="td-num">7,5%</td>
+            <td class="td-num">R$ 2.600</td>
+          </tr>
+          <tr>
+            <td>CDB 110–115% CDI</td>
+            <td>Bancos médios (FGC)</td>
+            <td class="td-num">R$ 300.000</td>
+            <td class="td-num">7,5%</td>
+            <td class="td-num">R$ 2.875</td>
+          </tr>
+          <tr>
+            <td>LCI / LCA isento</td>
+            <td>BTG / Itaú / XP</td>
+            <td class="td-num">R$ 300.000</td>
+            <td class="td-num">7,5%</td>
+            <td class="td-num td-green">R$ 2.375 (isento)</td>
+          </tr>
+          <tr>
+            <td>Debêntures incentivadas</td>
+            <td>XP / BTG</td>
+            <td class="td-num">R$ 200.000</td>
+            <td class="td-num">5%</td>
+            <td class="td-num td-green">R$ 2.000 (isento)</td>
+          </tr>
+          <tr>
+            <td>FIIs diversificados</td>
+            <td>B3 / XP</td>
+            <td class="td-num">R$ 600.000</td>
+            <td class="td-num">15%</td>
+            <td class="td-num td-green">R$ 5.000 (isento)</td>
+          </tr>
+          <tr>
+            <td>Ações + ETFs Brasil</td>
+            <td>B3 / XP</td>
+            <td class="td-num">R$ 400.000</td>
+            <td class="td-num">10%</td>
+            <td class="td-num">R$ 750</td>
+          </tr>
+          <tr>
+            <td>Internacional (IVVB11 + BDRs)</td>
+            <td>B3 / Avenue</td>
+            <td class="td-num">R$ 450.000</td>
+            <td class="td-num">11,25%</td>
+            <td class="td-num">—</td>
+          </tr>
+          <tr>
+            <td>Dólar / Proteção cambial</td>
+            <td>Avenue / BTG</td>
+            <td class="td-num">R$ 150.000</td>
+            <td class="td-num">3,75%</td>
+            <td class="td-num">—</td>
+          </tr>
+          <tr>
+            <td>Ouro (GOLD11)</td>
+            <td>B3</td>
+            <td class="td-num">R$ 150.000</td>
+            <td class="td-num">3,75%</td>
+            <td class="td-num">—</td>
+          </tr>
+          <tr style="border-top:2px solid rgba(201,168,76,0.5);">
+            <td class="td-gold" style="font-size:1rem;font-weight:700;">TOTAL</td>
+            <td>—</td>
+            <td class="td-num td-gold" style="font-size:1rem;">R$ 4.000.000</td>
+            <td class="td-num td-gold">100%</td>
+            <td class="td-num td-gold" style="font-size:1rem;">~R$ 25.225 bruto</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h3>Renda Líquida Estimada Mensal</h3>
+  <div class="stat-row">
+    <div class="stat-item">
+      <div class="stat-label">Renda Bruta Total</div>
+      <div class="stat-val">R$ 25.225</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-label">Impostos Estimados</div>
+      <div class="stat-val red">- R$ 3.800</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-label">Custo Profissionais</div>
+      <div class="stat-val red">- R$ 3.500</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-label">Renda Disponível</div>
+      <div class="stat-val green">~R$ 17.925</div>
+    </div>
+  </div>
+
+  <div class="callout success">
+    <div class="callout-title">Recomendação de Retirada</div>
+    <p>Retirar <strong>R$ 12.000–15.000/mês</strong> para custeio de vida e <strong>reinvestir R$ 3.000–5.000/mês</strong> no início. Isso garante crescimento real do patrimônio mesmo com consumo confortável.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- 12. SIMULAÇÃO -->
+<!-- ═══════════════════════════════════════════════════ -->
+<section class="section" id="simulacao">
+  <div class="section-header">
+    <div class="section-num">12</div>
+    <div class="section-title">Simulação Detalhada — Cenários Econômicos</div>
+  </div>
+
+  <h3>Como a carteira reagiria a crises</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Cenário</th><th>Impacto</th><th>Ativos Protegidos</th><th>Ativos Afetados</th><th>Ação Recomendada</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Inflação alta (IPCA 10%+)</td>
+          <td class="td-red">Corroe poder de compra</td>
+          <td>Tesouro IPCA+, LCA agro</td>
+          <td>CDB prefixados, renda fixa curta</td>
+          <td>Aumentar IPCA+, evitar prefixados</td>
+        </tr>
+        <tr>
+          <td>Queda da Selic (abaixo de 8%)</td>
+          <td class="td-red">Renda fixa rende menos</td>
+          <td>IPCA+ longo, ações, FIIs</td>
+          <td>Tesouro Selic, CDB pós-fixados</td>
+          <td>Migrar para renda variável gradualmente</td>
+        </tr>
+        <tr>
+          <td>Crise econômica (recessão)</td>
+          <td class="td-red">Queda de ações e FIIs</td>
+          <td>Tesouro Selic, dólar, ouro</td>
+          <td>Ações, FIIs de tijolo</td>
+          <td>Usar caixa de oportunidade para comprar</td>
+        </tr>
+        <tr>
+          <td>Dólar disparando (USD +30%)</td>
+          <td class="td-green">Protegido por exposição cambial</td>
+          <td>IVVB11, BDRs, dólar direto</td>
+          <td>Ativos puramente locais</td>
+          <td>Manter ou aumentar dolarização</td>
+        </tr>
+        <tr>
+          <td>Crise bancária</td>
+          <td class="td-red">Risco de inadimplência</td>
+          <td>Tesouro Direto (gov. federal)</td>
+          <td>CDBs acima do FGC</td>
+          <td>Migrar para Tesouro, diversificar bancos</td>
+        </tr>
+        <tr>
+          <td>Crise imobiliária</td>
+          <td class="td-red">Queda dos FIIs de tijolo</td>
+          <td>FIIs de papel (CRI/CDI)</td>
+          <td>FIIs lajes, shoppings</td>
+          <td>Rebalancear para papel</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Projeção de Renda Mensal ao Longo do Tempo</h3>
+  <div class="chart-wrap">
+    <div class="chart-title">Renda mensal gerada (reinvestindo parte) — Cenário Conservador</div>
+    <div style="display:flex;flex-wrap:wrap;gap:16px;margin-bottom:12px;font-size:12px;color:var(--ink-soft);">
+      <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:2px;background:#2D6A4F;"></span>Renda mensal (R$ mil)</span>
+      <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:2px;background:#C9A84C;"></span>Patrimônio (R$ Mi)</span>
+    </div>
+    <div style="position:relative;width:100%;height:280px;">
+      <canvas id="incomeChart" role="img" aria-label="Gráfico de renda mensal e patrimônio crescendo ao longo dos anos">Projeção de renda mensal e patrimônio ao longo de 20 anos.</canvas>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- 13. CONCLUSÃO -->
+<!-- ═══════════════════════════════════════════════════ -->
+<section class="section" id="conclusao">
+  <div class="section-header">
+    <div class="section-num">13</div>
+    <div class="section-title">Conclusão Estratégica Final</div>
+  </div>
+
+  <h3>As 10 decisões mais inteligentes</h3>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-label">01</div>
+      <div class="card-value" style="font-size:1rem;">Não decida nada nos primeiros 30 dias</div>
+      <p style="font-size:0.82rem;margin-top:0.25rem;">Estacione no Tesouro Selic e respire. Urgência é inimiga do patrimônio.</p>
+    </div>
+    <div class="card">
+      <div class="card-label">02</div>
+      <div class="card-value" style="font-size:1rem;">Contratar profissionais antes de investir</div>
+      <p style="font-size:0.82rem;margin-top:0.25rem;">CFP, contador, advogado. Esse trio protege e multiplica patrimônio.</p>
+    </div>
+    <div class="card">
+      <div class="card-label">03</div>
+      <div class="card-value" style="font-size:1rem;">Nunca concentrar em um banco</div>
+      <p style="font-size:0.82rem;margin-top:0.25rem;">Distribuir entre pelo menos 3–4 instituições + Tesouro Direto.</p>
+    </div>
+    <div class="card">
+      <div class="card-label">04</div>
+      <div class="card-value" style="font-size:1rem;">Ter isentos (LCI/LCA/FIIs)</div>
+      <p style="font-size:0.82rem;margin-top:0.25rem;">Eficiência tributária real. Renda isenta é renda maior.</p>
+    </div>
+    <div class="card">
+      <div class="card-label">05</div>
+      <div class="card-value" style="font-size:1rem;">Proteger contra inflação</div>
+      <p style="font-size:0.82rem;margin-top:0.25rem;">Tesouro IPCA+ de prazos longos é a melhor proteção estrutural.</p>
+    </div>
+    <div class="card">
+      <div class="card-label">06</div>
+      <div class="card-value" style="font-size:1rem;">Ter dólares (15–20%)</div>
+      <p style="font-size:0.82rem;margin-top:0.25rem;">Proteção cambial não é especulação. É seguro patrimonial.</p>
+    </div>
+    <div class="card">
+      <div class="card-label">07</div>
+      <div class="card-value" style="font-size:1rem;">Retirar menos do que rende</div>
+      <p style="font-size:0.82rem;margin-top:0.25rem;">Regra de ouro: gastar no máximo 80% da renda gerada. Reinvestir 20%.</p>
+    </div>
+    <div class="card">
+      <div class="card-label">08</div>
+      <div class="card-value" style="font-size:1rem;">Manter caixa de oportunidade</div>
+      <p style="font-size:0.82rem;margin-top:0.25rem;">Crises são oportunidades para quem tem liquidez disponível.</p>
+    </div>
+    <div class="card">
+      <div class="card-label">09</div>
+      <div class="card-value" style="font-size:1rem;">Discrição absoluta</div>
+      <p style="font-size:0.82rem;margin-top:0.25rem;">Não divulgue seu patrimônio. Discreção é a primeira camada de proteção.</p>
+    </div>
+    <div class="card">
+      <div class="card-label">10</div>
+      <div class="card-value" style="font-size:1rem;">Rebalancear anualmente</div>
+      <p style="font-size:0.82rem;margin-top:0.25rem;">A carteira se desalinha com o tempo. Revisar a cada 12 meses com seu CFP.</p>
+    </div>
+  </div>
+
+  <h3>Os erros fatais a evitar</h3>
+  <div class="callout warning">
+    <div class="callout-title">Erros que destroem R$ 4 milhões</div>
+    <p>
+      1. Gastar o principal em compras de ativos físicos depreciativos (carros, reformas excessivas) nos primeiros 2 anos.<br>
+      2. Entrar em negócios sem expertise do setor.<br>
+      3. Confiar dinheiro a familiares "para gerir".<br>
+      4. Deixar tudo na poupança ou conta corrente por inércia.<br>
+      5. Investir em produtos que não entende porque "o gerente recomendou".<br>
+      6. Sacar mais do que o patrimônio gera por anos seguidos.<br>
+      7. Não declarar investimentos no exterior (crime).<br>
+      8. Ignorar a inflação — 6% ao ano em 10 anos corrói 45% do poder de compra.
+    </p>
+  </div>
+
+  <h3>Visão de longo prazo</h3>
+  <p>R$ 4 milhões bem estruturados hoje, com uma retirada conservadora e reinvestimento disciplinado, podem se transformar em R$ 8–18 milhões em 10–20 anos — e gerar uma renda mensal de R$ 35.000–80.000 no futuro, dependendo do cenário econômico.</p>
+  <p>Mais importante do que o crescimento: você terá <strong>segurança, previsibilidade e liberdade financeira real</strong> — não uma sensação passageira de riqueza que desaparece.</p>
+  <p>O sucesso patrimonial de longo prazo não é uma questão de encontrar o investimento certo. É uma questão de construir uma estrutura robusta, contratar as pessoas certas, ter disciplina emocional e respeitar o tempo.</p>
+
+  <div class="callout success">
+    <div class="callout-title">Resumo da Estrutura Recomendada</div>
+    <p>
+      <strong>Bancos:</strong> Itaú Private + BTG + XP + Bradesco/Safra (FGC)<br>
+      <strong>Cartões:</strong> Nubank Ultravioleta (diário) + Itaú Personnalité (viagens)<br>
+      <strong>Renda Fixa (50%):</strong> Tesouro Selic + IPCA+ + CDB + LCI/LCA + Debêntures<br>
+      <strong>FIIs (15%):</strong> Tijolo + Papel + FoF + IFIX11<br>
+      <strong>Ações (10%):</strong> BOVA11 + dividendos + SMAL11<br>
+      <strong>Internacional (15%):</strong> IVVB11 + BDRs + Dólar<br>
+      <strong>Proteções (5%):</strong> Ouro GOLD11<br>
+      <strong>Caixa (5%):</strong> Liquidez imediata<br>
+      <strong>Profissionais:</strong> CFP + Contador + Advogado Patrimonial<br>
+      <strong>Renda líquida mensal:</strong> ~R$ 17.000–19.000<br>
+      <strong>Retirada recomendada:</strong> R$ 12.000–15.000/mês
+    </p>
+  </div>
+</section>
+
+</div><!-- /main -->
+
+<div class="footer">
+  <strong>Planejamento Patrimonial Profissional</strong> · Elaborado com base em práticas de family office e gestão de patrimônio<br>
+  Este documento é educacional e não constitui recomendação de investimento individualizada. Consulte profissionais certificados antes de tomar decisões.
+</div>
+
+<script>
+// PIE CHART
+const pieCtx = document.getElementById('pieChart').getContext('2d');
+new Chart(pieCtx, {
+  type: 'doughnut',
+  data: {
+    labels: ['Renda Fixa','FIIs','Internacional','Ações BR','Ouro','Caixa'],
+    datasets: [{
+      data: [50,15,15,10,5,5],
+      backgroundColor: ['#2D6A4F','#C9A84C','#1D3D6B','#9B2226','#8B6914','#6B6355'],
+      borderWidth: 2,
+      borderColor: '#FAF8F3'
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { display: false } }
+  }
+});
+
+// GROWTH CHART
+const growthCtx = document.getElementById('growthChart').getContext('2d');
+const years = [0,1,2,3,4,5,6,7,8,9,10,12,15,20];
+function grow(v, r, y) { return +(v * Math.pow(1+r, y) / 1e6).toFixed(2); }
+new Chart(growthCtx, {
+  type: 'line',
+  data: {
+    labels: years.map(y => 'Ano '+y),
+    datasets: [
+      {
+        label: 'Conservador 8%',
+        data: years.map(y => grow(4e6, 0.08, y)),
+        borderColor: '#2D6A4F', backgroundColor: 'rgba(45,106,79,0.08)',
+        borderWidth: 2, pointRadius: 3, fill: false,
+        borderDash: []
+      },
+      {
+        label: 'Moderado 11%',
+        data: years.map(y => grow(4e6, 0.11, y)),
+        borderColor: '#C9A84C', backgroundColor: 'rgba(201,168,76,0.08)',
+        borderWidth: 2, pointRadius: 3, fill: false,
+        borderDash: [6,3]
+      },
+      {
+        label: 'Pessimista 5%',
+        data: years.map(y => grow(4e6, 0.05, y)),
+        borderColor: '#9B2226', backgroundColor: 'rgba(155,34,38,0.08)',
+        borderWidth: 2, pointRadius: 3, fill: false,
+        borderDash: [2,4]
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: {
+        title: { display: true, text: 'R$ Milhões', font: { size: 11 } },
+        ticks: { callback: v => 'R$' + v.toFixed(1) + 'Mi' }
+      }
+    }
+  }
+});
+
+// INCOME CHART
+const incomeCtx = document.getElementById('incomeChart').getContext('2d');
+const incomeYears = [1,2,3,4,5,6,7,8,9,10,12,15,20];
+new Chart(incomeCtx, {
+  type: 'bar',
+  data: {
+    labels: incomeYears.map(y => 'Ano '+y),
+    datasets: [
+      {
+        label: 'Renda mensal (R$ mil)',
+        data: incomeYears.map(y => +(4e6 * Math.pow(1.08, y) * 0.055 / 12 / 1000).toFixed(1)),
+        backgroundColor: '#2D6A4F',
+        borderRadius: 4,
+        yAxisID: 'y'
+      },
+      {
+        label: 'Patrimônio (R$ Mi)',
+        type: 'line',
+        data: incomeYears.map(y => +(4e6 * Math.pow(1.08, y) / 1e6).toFixed(2)),
+        borderColor: '#C9A84C',
+        borderWidth: 2,
+        pointRadius: 4,
+        yAxisID: 'y2'
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: {
+        position: 'left',
+        title: { display: true, text: 'Renda (R$ mil/mês)', font: { size: 11 } },
+        ticks: { callback: v => 'R$' + v + 'k' }
+      },
+      y2: {
+        position: 'right',
+        title: { display: true, text: 'Patrimônio (R$ Mi)', font: { size: 11 } },
+        ticks: { callback: v => 'R$' + v + 'Mi' },
+        grid: { drawOnChartArea: false }
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>
